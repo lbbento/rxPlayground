@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.lbento.rxplayground.MainActivity">
+
+    <Button
+        android:id="@+id/activity_main_button1"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Button1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="8dp"
+         />
+
+    <Button
+        android:id="@+id/activity_main_button2"
+        android:text="Button2"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/activity_main_button1" />
+
+
+    <Button
+        android:id="@+id/activity_main_button3"
+        android:text="Button3"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/activity_main_button2" />
+
+    <Button
+        android:id="@+id/activity_main_button4"
+        android:text="Button4"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/activity_main_button3" />
+
+    <Button
+        android:id="@+id/activity_main_button5"
+        android:text="Button5"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/activity_main_button4" />
+
+    <Button
+        android:id="@+id/activity_main_button6"
+        android:text="Button6"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/activity_main_button5" />
+
+    <Button
+        android:id="@+id/activity_main_button7"
+        android:text="Button7"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/activity_main_button6" />
+
+    <Button
+        android:id="@+id/activity_main_button8"
+        android:text="Button8"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/activity_main_button7" />
+
+</android.support.constraint.ConstraintLayout>
