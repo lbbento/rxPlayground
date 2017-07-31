@@ -5,10 +5,14 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.Button
 import com.jakewharton.rxbinding2.view.RxView.clicks
+import io.reactivex.Maybe
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import java.lang.Thread.currentThread
+import java.util.concurrent.TimeUnit.MILLISECONDS
 import java.util.concurrent.TimeUnit.SECONDS
 
 
@@ -28,7 +32,15 @@ class MainActivity : AppCompatActivity() {
         clicks(activity_main_button6 as Button).subscribe { rxFlatMappingObservableChanging() }
         clicks(activity_main_button7 as Button).subscribe { rxThreadMappingObservable() }
         clicks(activity_main_button8 as Button).subscribe { rxThreadFlatMappingObservable() }
+
+
+        clicks(activity_main_button9 as Button).subscribe { rxFilterObservable() }
+        clicks(activity_main_button10 as Button).subscribe { rxDebounceObservable() }
+
+        clicks(activity_main_button11 as Button).subscribe { rxComposeLikeObservable() }
+
     }
+
 
     private fun rxCreatingSimpleObservable() {
         myIntObservable.subscribe {
@@ -62,7 +74,8 @@ class MainActivity : AppCompatActivity() {
     */
 
     private fun rxHotShareObservable() {
-        val textFieldObservable = Observable.interval(1L, SECONDS).map(Long::toString).share()
+        val textFieldObservable = Observable.interval(1L, SECONDS).map(Long::toString).share() //similar to autoConnect but it
+        //disposes itself after there are no more subscriptions - starts over on the next subscription
 
         textFieldObservable.subscribe { Log.d(MainActivity::class.java.name, "Observer1 : $it") }
 
@@ -126,39 +139,96 @@ class MainActivity : AppCompatActivity() {
         Observable.fromArray(1, 2, 3, 4, 5)
                 .subscribeOn(Schedulers.io())
                 .doOnEach {
-                    Log.d("Thread-doOnEach", Thread.currentThread().name)
+                    Log.d("Thread-doOnEach", currentThread().name)
                 }
                 .map {
-                    Log.d("Thread-map", Thread.currentThread().name)
+                    Log.d("Thread-map", currentThread().name)
                     "Number $it"
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    Log.d("Thread-subscribe", Thread.currentThread().name)
+                    Log.d("Thread-subscribe", currentThread().name)
                     Log.d(MainActivity::class.java.name, it)
                 }
     }
 
     /*
 
-    SLIDE 9
+    SLIDE 8
 
      */
     private fun rxThreadFlatMappingObservable() {
         Observable.fromArray(1, 2, 3, 4, 5)
                 .doOnEach {
-                    Log.d("Thread-doOnEach", Thread.currentThread().name)
+                    Log.d("Thread-doOnEach", currentThread().name)
                 }
                 .flatMap {
-                    Log.d("Thread-flatMap", Thread.currentThread().name)
+                    Log.d("Thread-flatMap", currentThread().name)
                     Observable.just("Number $it")
                 }
                 .subscribe {
-                    Log.d("Thread-subscribe", Thread.currentThread().name)
+                    Log.d("Thread-subscribe", currentThread().name)
                     Log.d(MainActivity::class.java.name, it)
                 }
     }
 
+
+    /*
+
+    SLIDE 9
+
+     */
+
+    private fun rxFilterObservable() {
+        Observable.fromArray(1, 2, 3, 4, 5)
+                .filter { it > 2 }
+                .reduce { sum, number -> sum + number }
+                .map { it.toString() }
+                .applySchedulers()
+                .subscribe {
+                    Log.d(MainActivity::class.java.name, it)
+                }
+    }
+
+
+    private fun rxDebounceObservable() {
+        Observable.interval(1000, MILLISECONDS, Schedulers.computation())
+                .take(10)
+                .map(Long::toString)
+                .debounce(1000, MILLISECONDS)
+                .subscribe {
+                    Log.d(MainActivity::class.java.name, it)
+                }
+    }
+
+    /*
+
+    SLIDE 11
+
+     */
+    private fun rxComposeLikeObservable() {
+        Observable.fromArray(1, 2, 3, 4, 5)
+                .doOnEach {
+                    Log.d("Thread-doOnEach", currentThread().name)
+                }
+                .flatMap {
+                    Log.d("Thread-flatMap", currentThread().name)
+                    Observable.just("Number $it")
+                }
+                .applySchedulers()
+                .subscribe {
+                    Log.d("Thread-subscribe", currentThread().name)
+                    Log.d(MainActivity::class.java.name, it)
+                }
+    }
+
+    private fun <T> Observable<T>.applySchedulers(): Observable<T> {
+        return subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread())
+    }
+
+    private fun <T> Maybe<T>.applySchedulers(): Maybe<T> {
+        return subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread())
+    }
 
     private val myIntObservable = Observable.create<Int> {
         it.onNext(1)
