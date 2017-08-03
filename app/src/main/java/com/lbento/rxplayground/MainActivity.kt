@@ -7,7 +7,6 @@ import android.widget.Button
 import com.jakewharton.rxbinding2.view.RxView.clicks
 import io.reactivex.Maybe
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
@@ -51,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
     /*
 
-    SLIDE 5
+    SLIDE 5 - Just start emmiting after you call connect on the observable - util for changeListeners for example
 
      */
 
@@ -101,7 +100,7 @@ class MainActivity : AppCompatActivity() {
     /*
 
     SLIDE 7 - equivalent to mapping - SHOULD NOT BE USED LIKE THIS - another observable needs to be created
-    If flatmap is returning a just, something is wrong.
+    If flatmap is returning Observable.just, something is wrong.
 
      */
     private fun rxFlatMappingObservable() {
@@ -120,9 +119,10 @@ class MainActivity : AppCompatActivity() {
     private fun rxFlatMappingObservableChanging() {
         Observable.fromArray(1, 2)
                 .flatMapSingle {
-                    Observable.fromArray("A", "B", "C", "D", "E").collect(
-                            { mutableListOf<String>() },
-                            { list, element -> list.add(element) })
+                    Observable.fromArray("A", "B", "C", "D", "E")
+                            .collect(
+                                    { mutableListOf<String>() },
+                                    { list, element -> list.add(element) })
                 }
                 .subscribe {
                     Log.d(MainActivity::class.java.name, it.toString())
@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity() {
 
     /*
 
-    SLIDE 8
+    SLIDE 8 - Execute that and check the comments and what's happening with the threads - try moving the observeOn and see the effect downstream
 
     */
     private fun rxThreadMappingObservable() {
@@ -154,7 +154,7 @@ class MainActivity : AppCompatActivity() {
 
     /*
 
-    SLIDE 8
+    SLIDE 8 - Execute that and check the comments and what's happening with the threads
 
      */
     private fun rxThreadFlatMappingObservable() {
@@ -203,7 +203,7 @@ class MainActivity : AppCompatActivity() {
 
     /*
 
-    SLIDE 11
+    SLIDE 11 - Execute that and check the comments and what's happening with the threads
 
      */
     private fun rxComposeLikeObservable() {
@@ -222,6 +222,7 @@ class MainActivity : AppCompatActivity() {
                 }
     }
 
+    //Extension function in kotlin to avoid having to call observeOn and SubscribeOn explicitly
     private fun <T> Observable<T>.applySchedulers(): Observable<T> {
         return subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread())
     }
@@ -236,7 +237,6 @@ class MainActivity : AppCompatActivity() {
         it.onNext(3)
         it.onComplete()
     }
-
 
     private fun sleep(millis: Long) {
         try {
